@@ -284,7 +284,6 @@ function mostraFineQuiz() {
   let voto = (giuste/registro.length)*100;
 
   let percentualeGiuste = (giuste / questions.length) * 100;
-  /* let percentualeSbagliate = (sbagliate / questions.length) * 100; */
 
   // Rendi visibile il grafico e imposta le dimensioni
   const graficoDiv = document.querySelector(".grafico");
@@ -306,12 +305,6 @@ function mostraFineQuiz() {
   graficoDiv1.style.justifyContent = "center";
   graficoDiv1.style.alignItems = "center";
   graficoDiv1.style.flexDirection = "column";   
-
-  /* document.querySelector(".grafico").style.background = `conic-gradient(
-      green 0% ${percentualeGiuste}%, 
-      red ${percentualeGiuste}% 100%
-  )`; */
-
   graficoDiv1.innerHTML ="Risposte corrette: " + "<span style='color:green'>" + giuste +"</span>"+ "<br>" +
   "Risposte sbagliate: " + "<span style='color:red'>"+ sbagliate  + "<br>";
 
@@ -325,7 +318,7 @@ function mostraFineQuiz() {
   }
   votoFin.innerHTML = "<span style='font-size:50px'>il tuo punteggio è di:" + voto +"</span>";
 
-  MostraRis.appendChild(span2); 
+  MostraRis.appendChild(span); 
   MostraRis.appendChild(votoFin);
 
   let divDom = document.querySelector("#listaDomande");
