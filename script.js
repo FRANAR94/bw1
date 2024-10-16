@@ -113,7 +113,7 @@
 //funzioni
 
 function startTimer() {
-    let tempo = 30; // Imposta il tempo per ogni domanda 
+    let tempo = 10; // Imposta il tempo per ogni domanda 
     const countdown = document.getElementById("timer");
   
     // Cancella il vecchio timer se esiste (utile quando si passa alla nuova domanda)
@@ -123,7 +123,15 @@ function startTimer() {
     timerInterval = setInterval(function () {
       countdown.textContent = tempo;
       tempo--;
-  
+      
+      const percentualeTempo = (tempo / 10) * 100;
+      const cerchioDiv = document.querySelector('.cerchio');
+      // Aggiorna il conic-gradient per il timer
+      cerchioDiv.style.background = `conic-gradient(
+        rgba(255, 255, 255, 0.1) ${percentualeTempo}%, 
+        #00ffff ${percentualeTempo}% 100% 
+      )`;
+
       if (tempo < 0) {
         clearInterval(timerInterval); // Ferma il timer
         passaAllaProssimaDomanda(); // Passa automaticamente alla prossima domanda
@@ -234,6 +242,7 @@ function verificaRisposta() {
           verifica = false;
       }
   } else {
+      verifica = false;
       creaDomande();
   }
 
@@ -242,8 +251,12 @@ function verificaRisposta() {
 }
 
 function mostraFineQuiz() {
+
+  const clocks = document.querySelector(".cerchiovuoto");
+  clocks.innerHTML = "";
+
   const clock = document.querySelector(".cerchio");
-  clock.innerHTML = "";
+  clock.style.display = "none";
 
   const butn = document.querySelector(".conferma");
   butn.innerHTML = "";
@@ -252,7 +265,7 @@ function mostraFineQuiz() {
   risposte.innerHTML = ""; 
 
   const domandaDiv = document.getElementById("domanda");
-  domandaDiv.innerHTML = "<span style='font-size:40px'> <b> Quiz Completato! </b> </span>";
+  domandaDiv.innerHTML = "<span style='font-size:60px; text-align:center'> <b> Quiz Completato! </b> </span>";
 
   const MostraRis = document.getElementById("finequiz"); 
   MostraRis.innerHTML = ""; // Pulisci il contenuto precedente
@@ -262,53 +275,75 @@ function mostraFineQuiz() {
 
   // Calcola le risposte corrette e sbagliate
   for (let i = 0; i < registro.length; i++) {
-    if (registro[i]) {
-      giuste += 1; 
-    } else {
-      sbagliate += 1; 
-    }
+      if (registro[i]) {
+          giuste += 1; 
+      } else {
+          sbagliate += 1; 
+      }
   }
+  let voto = (giuste/registro.length)*100;
 
   let percentualeGiuste = (giuste / questions.length) * 100;
-  let percentualeSbagliate = (sbagliate / questions.length) * 100;
+  /* let percentualeSbagliate = (sbagliate / questions.length) * 100; */
 
-  document.querySelector(".grafico").style.background = `conic-gradient(
+  // Rendi visibile il grafico e imposta le dimensioni
+  const graficoDiv = document.querySelector(".grafico");
+  graficoDiv.style.position = "relative"; 
+  graficoDiv.style.display = "block";
+  graficoDiv.style.width = "200px"; 
+  graficoDiv.style.height = "200px";  
+  graficoDiv.style.background = `conic-gradient(
     green 0% ${percentualeGiuste}%, 
     red ${percentualeGiuste}% 100%
-  )`;
+)`;
 
-  // Crea un nuovo elemento span per visualizzare il risultato
-  let span = document.createElement("span"); 
-  span.innerHTML = "Risposte corrette: " + "<span style='color:green'>" + giuste + " domande" +"</span>"+ "<br>" +
-                   "Risposte sbagliate: " + "<span style='color:red'>"+ sbagliate + " domande" + "<br>";
-  MostraRis.appendChild(span); 
+  const graficoDiv1 = document.querySelector(".graficovuoto");
+  graficoDiv1.style.position = "absolute";
+  graficoDiv1.style.display = "block";
+  graficoDiv1.style.width = "180px";
+  graficoDiv1.style.height = "180px";
+  graficoDiv1.style.display = "flex";
+  graficoDiv1.style.justifyContent = "center";
+  graficoDiv1.style.alignItems = "center";
+  graficoDiv1.style.flexDirection = "column";   
 
-  let span2 = document.createElement("span");
+  /* document.querySelector(".grafico").style.background = `conic-gradient(
+      green 0% ${percentualeGiuste}%, 
+      red ${percentualeGiuste}% 100%
+  )`; */
+
+  graficoDiv1.innerHTML ="Risposte corrette: " + "<span style='color:green'>" + giuste +"</span>"+ "<br>" +
+  "Risposte sbagliate: " + "<span style='color:red'>"+ sbagliate  + "<br>";
+
+  let span = document.createElement("span");
+  let votoFin = document.createElement("span");
 
   if(giuste >= 6){
-    span2.innerHTML = "<span style='color:green'> Hai superato il test </span>"
+      span.innerHTML = "<span style='color:green; font-size:50px'> Test superato </span>"
   } else{
-    span2.innerHTML = "<span style='color:red'> Non hai superato il test </span>"
+      span.innerHTML = "<span style='color:red; font-size:50px'> Test non superato </span>"
   }
+  votoFin.innerHTML = "<span style='font-size:50px'>il tuo punteggio è di:" + voto +"</span>";
+
   MostraRis.appendChild(span2); 
+  MostraRis.appendChild(votoFin);
 
   let divDom = document.querySelector("#listaDomande");
 
   for (let i = 0;i<registro.length;i++){
-    let li = document.createElement("li");
-    if(registro[i] === true){
-      li.innerHTML = `<p><b>Domanda: </b><span>${questions[i].question}</span> <br><br> <b>Risposta esatta: </b> ${questions[i].correct_answer} ` ;
-      li.classList.add("liok");
-    }else{
-      li.innerHTML = `<p><b>Domanda: </b><span>${questions[i].question}</span> <br><br> <b>Risposta esatta: </b> ${questions[i].correct_answer} ` ;
-      li.classList.add("lino");
-    }
-    divDom.appendChild(li);
+      let li = document.createElement("li");
+      if(registro[i] === true){
+          li.innerHTML = `<p><b>Domanda: </b><span>${questions[i].question}</span> <br><br> <b>Risposta esatta: </b> ${questions[i].correct_answer} ` ;
+          li.classList.add("liok");
+      }else{
+          li.innerHTML = `<p><b>Domanda: </b><span>${questions[i].question}</span> <br><br> <b>Risposta esatta: </b> ${questions[i].correct_answer} ` ;
+          li.classList.add("lino");
+      }
+      divDom.appendChild(li);
   }
 
   const numDomanda = document.getElementById("numDomanda");
-  numDomanda.innerHTML = "<strong>Quiz Terminato!</strong>";
-
+  numDomanda.innerHTML = "";
 }
 
 btn.addEventListener('click', () => {

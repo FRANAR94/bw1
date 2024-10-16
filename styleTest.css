@@ -33,7 +33,7 @@ header img{
     align-items: center;
     justify-content: center;
     gap:15px;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
 
 .contCheck{
@@ -125,6 +125,7 @@ footer{
     border-radius: 15px;
     padding:10px;
     margin:5px;
+    list-style-type:none;
 }
 .lino{
     border: 1px solid black;
@@ -132,23 +133,65 @@ footer{
     border-radius: 15px;
     padding:10px;
     margin:5px;
+    list-style-type:none;
 }
 
 .contgrafico{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin:20px;
+    margin: 20px;
 }
 
 .grafico {
-    width: 80px;
-    height: 80px;
+    display: none; /* Nascondi il grafico inizialmente */
+    width: 0;
+    height: 0;
     border-radius: 50%;
     background: conic-gradient( );
-    display: inline-block;
   }
 
+.graficovuoto{
+    position: absolute;
+    display: none;
+    width: 0px;
+    height: 0px;
+    border-radius: 50%;
+    background-color: rgb(9, 12, 61);
+}
 
+.cerchio {
+    margin-top:50px;
+    position: relative;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+}
+
+.cerchiovuoto {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-image: url(assets/bg.jpg);
+    background-position: 80%;
+    background-size: 700px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 10px;
+    font-weight: bold;
+    z-index: 1; /* Sovrappone il contenuto al cerchio del timer */
+}
+
+#timer {
+    font-size: 20px;
+    margin: 5px 0;
+}
 
 
