@@ -29,11 +29,14 @@ header img{
 
 #finequiz{
     display: flex;
-    align-items: center;;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    gap:15px;
+    margin-bottom: 50px;
 }
 
-section{
+.contCheck{
     height: 200px;
     display: flex;
     align-items: center;
@@ -110,6 +113,41 @@ footer{
     border:none;
     background-color: transparent;
 }
+
+#listaDomande{
+    margin: 0 15%;
+    margin-top: 30px;
+}
+
+.liok{
+    border: 1px solid black;
+    background-color: rgba(90, 243, 161, 0.914);    
+    border-radius: 15px;
+    padding:10px;
+    margin:5px;
+}
+.lino{
+    border: 1px solid black;
+    background-color: rgba(237, 102, 102, 0.934);    
+    border-radius: 15px;
+    padding:10px;
+    margin:5px;
+}
+
+.contgrafico{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin:20px;
+}
+
+.grafico {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: conic-gradient( );
+    display: inline-block;
+  }
 
 
 

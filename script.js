@@ -100,18 +100,54 @@
     ];
   
 
-  //dati
+//dati
+
   let currentQuestionIndex = 0; // Per tenere traccia della domanda attuale
   let flagNumScelte ;
   let registro = []; // per racciare le risposte sbagliate e corrette
   let verifica; //bool da aggiungere a verifica in caso di risposta giusta o errata
-  let giuste;
-  let sbagliate;
   let esito = "";
+  let timerInterval; // Variabile globale per il timer
+  let btn = document.getElementById("conferma");
 
-  //funzioni
+//funzioni
+
+function startTimer() {
+    let tempo = 30; // Imposta il tempo per ogni domanda 
+    const countdown = document.getElementById("timer");
+  
+    // Cancella il vecchio timer se esiste (utile quando si passa alla nuova domanda)
+    clearInterval(timerInterval);
+  
+    // Avvia il nuovo timer
+    timerInterval = setInterval(function () {
+      countdown.textContent = tempo;
+      tempo--;
+  
+      if (tempo < 0) {
+        clearInterval(timerInterval); // Ferma il timer
+        passaAllaProssimaDomanda(); // Passa automaticamente alla prossima domanda
+      }
+    }, 1000);
+}
+
+function passaAllaProssimaDomanda() {
+    verificaRisposta(); // Prima verifica la risposta attuale
+    currentQuestionIndex++;
+  
+    if (currentQuestionIndex < questions.length) {
+      creaDomande(); // Carica la prossima domanda
+      startTimer(); // Riparte il timer per la nuova domanda
+    } else {
+      clearInterval(timerInterval);
+      mostraFineQuiz();
+    }
+}
 
 function creaDomande() {
+
+  startTimer(); 
+
   const domandaDiv = document.getElementById("domanda");
   const risposte = document.getElementById("risposte");
   
@@ -138,6 +174,7 @@ function creaDomande() {
   // Reset dei checkbox (deseleziona tutti)
   for (let checkbox of checkboxes) {
       checkbox.checked = false;
+      checkbox = false;
   }
 
   // Gestione del numero di checkbox in base al tipo di domanda
@@ -192,14 +229,11 @@ function verificaRisposta() {
 
       // Confronta la risposta selezionata con la risposta corretta
       if (selectedValue === correctAnswer) {
-          /* alert("Risposta corretta!"); */
           verifica = true;
       } else {
-          /* alert("Risposta sbagliata. La risposta corretta era: " + correctAnswer); */
           verifica = false;
       }
   } else {
-      alert("Seleziona una risposta!");
       creaDomande();
   }
 
@@ -208,14 +242,23 @@ function verificaRisposta() {
 }
 
 function mostraFineQuiz() {
+  const clock = document.querySelector(".cerchio");
+  clock.innerHTML = "";
+
+  const butn = document.querySelector(".conferma");
+  butn.innerHTML = "";
+
+  const risposte = document.getElementById("risposte");
+  risposte.innerHTML = ""; 
+
   const domandaDiv = document.getElementById("domanda");
-  domandaDiv.textContent = "Hai completato il quiz!";
+  domandaDiv.innerHTML = "<span style='font-size:40px'> <b> Quiz Completato! </b> </span>";
 
   const MostraRis = document.getElementById("finequiz"); 
   MostraRis.innerHTML = ""; // Pulisci il contenuto precedente
 
-  let giuste = 0; 
-  let sbagliate = 0; 
+  let giuste = 0;
+  let sbagliate = 0;
 
   // Calcola le risposte corrette e sbagliate
   for (let i = 0; i < registro.length; i++) {
@@ -226,34 +269,50 @@ function mostraFineQuiz() {
     }
   }
 
+  let percentualeGiuste = (giuste / questions.length) * 100;
+  let percentualeSbagliate = (sbagliate / questions.length) * 100;
+
+  document.querySelector(".grafico").style.background = `conic-gradient(
+    green 0% ${percentualeGiuste}%, 
+    red ${percentualeGiuste}% 100%
+  )`;
+
   // Crea un nuovo elemento span per visualizzare il risultato
   let span = document.createElement("span"); 
-  span.innerHTML = "Hai risposto correttamente a: " + "<span style='color:green'>" + giuste + " domande" +"</span>"+ "<br>" +
-                   "Hai sbagliato: " + "<span style='color:red'>"+ sbagliate + " domande";
+  span.innerHTML = "Risposte corrette: " + "<span style='color:green'>" + giuste + " domande" +"</span>"+ "<br>" +
+                   "Risposte sbagliate: " + "<span style='color:red'>"+ sbagliate + " domande" + "<br>";
   MostraRis.appendChild(span); 
 
-  const risposte = document.getElementById("risposte");
-  risposte.innerHTML = ""; // svuota liste
+  let span2 = document.createElement("span");
+
+  if(giuste >= 6){
+    span2.innerHTML = "<span style='color:green'> Hai superato il test </span>"
+  } else{
+    span2.innerHTML = "<span style='color:red'> Non hai superato il test </span>"
+  }
+  MostraRis.appendChild(span2); 
+
+  let divDom = document.querySelector("#listaDomande");
+
+  for (let i = 0;i<registro.length;i++){
+    let li = document.createElement("li");
+    if(registro[i] === true){
+      li.innerHTML = `<p><b>Domanda: </b><span>${questions[i].question}</span> <br><br> <b>Risposta esatta: </b> ${questions[i].correct_answer} ` ;
+      li.classList.add("liok");
+    }else{
+      li.innerHTML = `<p><b>Domanda: </b><span>${questions[i].question}</span> <br><br> <b>Risposta esatta: </b> ${questions[i].correct_answer} ` ;
+      li.classList.add("lino");
+    }
+    divDom.appendChild(li);
+  }
 
   const numDomanda = document.getElementById("numDomanda");
   numDomanda.innerHTML = "<strong>Quiz Terminato!</strong>";
 
 }
 
-
-let btn = document.getElementById("conferma");
-
 btn.addEventListener('click', () => {
-  if (currentQuestionIndex < questions.length) {
-    verificaRisposta();  // Prima verifica la risposta attuale
-    currentQuestionIndex++;  
-
-    if (currentQuestionIndex < questions.length) {
-      creaDomande(); // Carica la prossima domanda
-    } else {
-      mostraFineQuiz(); // Mostra il messaggio di fine quiz
-    }
-  }
+  passaAllaProssimaDomanda();
 });
 
 // Carica la prima domanda quando la pagina è pronta perche o seno mi esce vuoto
@@ -263,9 +322,8 @@ window.onload = function() {
 
 //chiudo la prima pagina e vado al quiz
 function vaiAdUnAltraPagina() {
-  window.location.href = "test.html"; // Sostituisci con la tua URL
+  window.location.href = "test.html"; 
 }
 
-  
 
-    
+

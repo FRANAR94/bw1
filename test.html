@@ -6,23 +6,37 @@
     <title>Document</title>
     <link rel="stylesheet" href="styleTest.css">
 </head>
+
 <body>
+
     <header>
         <img src="assets/epicode_logo.png" alt="logo epicode">
-        <div id="timer">
-            <p>qui va il timer</p><!-- qui mettiamo il timer-->
+        <div class="cerchio">
+            <div class="cerchiovuoto">
+                <span>SECONDS</span>
+                <span id="timer">30 </span>
+                <span>REMANING</span>
+            </div>
         </div>
     </header>
 
     <div id="domanda">
         <h2>
-            <!--inserisco la domanda prendendola da js-->
+            
         </h2>
     </div>
 
-    <div id="finequiz"></div>
+    <div class="contgrafico">
+        <div class="grafico"></div>
+    </div>
 
-    <section>
+    <div id="finequiz">
+        
+    </div>
+
+    <ul id="listaDomande"></ul>
+
+    <div class="contCheck">
         <div id="risposte">
             <input type="checkbox" id="1" class="myCheckbox">
             <label class="label" for="1">Option 1</label>
@@ -36,19 +50,16 @@
             <input type="checkbox" id="4" class="myCheckbox">
             <label class="label" for="4">Option 4</label>
         </div>
-    </section>
-
+    </div>
 
     <div class="conferma">
         <button id="conferma">conferma selezione</button>
     </div>
 
-
     <footer>
         <div id="numDomanda"></div>
     </footer>
 
-    
 </body>
 
 <script src="script.js"></script>
