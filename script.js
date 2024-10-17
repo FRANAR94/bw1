@@ -17,7 +17,7 @@
         type: "multiple",
         difficulty: "easy",
         question:
-          "In the programming language Java, which of these keywords would you put on a variable to make sure it doesn&#039;t get modified?",
+          "In the programming language Java, which of these keywords would you put on a variable to make sure it doesn't get modified?",
         correct_answer: "Final",
         incorrect_answers: ["Static", "Private", "Public"],
       },
@@ -112,31 +112,31 @@
 
 //funzioni
 
-function startTimer() {
-    // Cancella il vecchio 
-    clearInterval(timerInterval);
+function startTimer(tempoIniziale) {
+  let tempo = tempoIniziale; // Imposta il tempo per ogni domanda 
+  const countdown = document.getElementById("timer");
 
-    let tempo = 10; // imposto il tempo
-    const countdown = document.getElementById("timer");
-  
-    // Avvia il nuovo timer
-    timerInterval = setInterval( ()=> {
-      countdown.textContent = tempo;
-      tempo--;
-      // gestiosco il timer con conic gradiente
-      const percentualeTempo = (tempo/ 10) * 100;
-      const cerchioDiv = document.querySelector('.cerchio');
-      // Aggiorna il conic-gradient per il timer
-      cerchioDiv.style.background = `conic-gradient(
-        rgba(255, 255, 255, 0.1) 0% ${percentualeTempo}%, 
-        #00ffff ${percentualeTempo}% 100% 
-      )`;
+  // Cancella il vecchio timer se esiste (utile quando si passa alla nuova domanda)
+  clearInterval(timerInterval);
 
-      if (tempo < 0) {
-        clearInterval(timerInterval); // Ferma il timer
-        setTimeout(passaAllaProssimaDomanda,1100); // Per gestire lo 0, aspetto 1 secondo
-      }
-    }, 1000);
+  // Avvia il nuovo timer
+  timerInterval = setInterval(function () {
+    countdown.textContent = tempo;
+    tempo--;
+    
+    const percentualeTempo = (tempo / tempoIniziale) * 100;
+    const cerchioDiv = document.querySelector('.cerchio');
+    // Aggiorna il conic-gradient per il timer
+    cerchioDiv.style.background = `conic-gradient(
+      rgba(255, 255, 255, 0.1) ${percentualeTempo}%, 
+      #00ffff ${percentualeTempo}% 100% 
+    )`;
+
+    if (tempo < 0) {
+      clearInterval(timerInterval); // Ferma il timer
+      passaAllaProssimaDomanda(); // Passa automaticamente alla prossima domanda
+    }
+  }, 1000);
 }
 
 function passaAllaProssimaDomanda() {
@@ -152,8 +152,14 @@ function passaAllaProssimaDomanda() {
 }
 
 function creaDomande() {
+  let tempoDomanda = 60;
+  const currentQuestion = questions[currentQuestionIndex];
 
-  startTimer(); 
+  if (currentQuestion.type === "boolean") {
+    tempoDomanda = 30;
+  }
+
+  startTimer(tempoDomanda); 
 
   const domandaDiv = document.getElementById("domanda");
   const risposte = document.getElementById("risposte");
@@ -164,7 +170,7 @@ function creaDomande() {
   const numDomanda = document.getElementById("numDomanda");
   numDomanda.innerHTML = `<strong>QUESTION ${currentQuestionIndex + 1}<span style="color:#d936eb"> / ${questions.length}</span></strong>`;
 
-  const currentQuestion = questions[currentQuestionIndex];
+  /* const currentQuestion = questions[currentQuestionIndex]; */
 
   // mando la domanda a video
   const questionText = document.createElement("h2");
@@ -209,6 +215,15 @@ function creaDomande() {
               casellelab[i].classList.remove("vis");
               checkboxes[i].classList.remove("vis");
               checkboxes[i].value = selezioni[i];
+              // marta: Aggiungi un event listener per fare in modo che solo un checkbox sia selezionato alla volta
+              checkboxes[i].addEventListener("click", function () {
+                // Deseleziona tutti gli altri checkbox
+                for (let j = 0; j < checkboxes.length; j++) {
+                    if (checkboxes[j] !== this) {
+                        checkboxes[j].checked = false;
+                    }
+                }
+            })
           } else {
               // Nascondi i checkbox e label in eccesso
               casellelab[i].classList.add("vis");
@@ -312,6 +327,8 @@ function mostraFineQuiz() {
 
   if(giuste >= questions.length*0.6){
       span.innerHTML = "<span style='color:green; font-size:50px'> Test superato </span>"
+      let certificato = document.querySelector(".certificato");
+      certificato.style.display = "block";
   } else{
       span.innerHTML = "<span style='color:red; font-size:50px'> Test non superato </span>"
   }

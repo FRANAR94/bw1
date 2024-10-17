@@ -197,3 +197,23 @@ footer{
     list-style-type:none;
 }
 
+.certificato{
+    display:none;
+}
+
+.download-button {
+    padding: 10px 20px;
+    background-color: #d20094; 
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-family: "Outfit", sans-serif;
+    font-size: bold;
+    display: inline-block;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.download-button:hover {
+    background-color: #7545a0; 
+}
