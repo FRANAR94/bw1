@@ -67,7 +67,10 @@ button {
 }
 
 button:hover {
-    color: #00FFFF;
+    background-color: #e100ff;
+    box-shadow: none;
+    border-radius: 5px;
+    color:white;
 }
 
 button {

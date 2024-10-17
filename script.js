@@ -113,7 +113,7 @@
 //funzioni
 
 function startTimer(tempoIniziale) {
-  let tempo = tempoIniziale; // Imposta il tempo per ogni domanda 
+  let tempo = tempoIniziale-1; // Imposta il tempo per ogni domanda 
   const countdown = document.getElementById("timer");
 
   // Cancella il vecchio timer se esiste (utile quando si passa alla nuova domanda)
