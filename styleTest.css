@@ -27,15 +27,6 @@ header img{
     margin: 0 25%;
 }
 
-#finequiz{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap:15px;
-    margin-bottom: 30px;
-}
-
 .contCheck{
     height: 200px;
     display: flex;
@@ -74,7 +65,6 @@ label {
     cursor: pointer;
 }
 
-/* Cambia colore quando l'utente passa sopra il pulsante */
 label:hover {
     background-color: #d936eb;
 }
@@ -114,11 +104,82 @@ footer{
     background-color: transparent;
 }
 
+ /* style timer con conic gradient */
+.cerchio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top:50px;
+    position: relative;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background-color: transparent;
+}
+
+.cerchiovuoto {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-image: url(assets/bg.jpg);
+    background-position: 80%;
+    background-size: 700px;/*cosi per far coincedere con l'immagine di sfondo*/
+    font-size: 10px;
+    font-weight: bold;
+    z-index: 1; /* per posizionare contenuto sopra il timer*/
+}
+
+#timer {
+    font-size: 20px;
+    margin: 5px 0;
+}
+
+
+/*FINE QUIZ*/
+
+/*style grafico fine quiz*/
+
+.contgrafico{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+}
+.grafico {
+    display: none; /* Nascondi il grafico inizialmente */
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: conic-gradient( );
+}
+.graficovuoto{
+    position: absolute;
+    display: none;
+    width: 0px;
+    height: 0px;
+    border-radius: 50%;
+    background-color: rgb(9, 12, 61);
+}
+#finequiz{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap:15px;
+    margin-bottom: 30px;
+}
+
+/*lista domande giuste e sbagliate*/
+
 #listaDomande{
     margin: 0 15%;
     margin-top: 30px;
 }
-
 .liok{
     border: 1px solid black;
     background-color: rgba(90, 243, 161, 0.914);    
@@ -135,63 +196,4 @@ footer{
     margin:5px;
     list-style-type:none;
 }
-
-.contgrafico{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 20px;
-}
-
-.grafico {
-    display: none; /* Nascondi il grafico inizialmente */
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: conic-gradient( );
-  }
-
-.graficovuoto{
-    position: absolute;
-    display: none;
-    width: 0px;
-    height: 0px;
-    border-radius: 50%;
-    background-color: rgb(9, 12, 61);
-}
-
-.cerchio {
-    margin-top:50px;
-    position: relative;
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-}
-
-.cerchiovuoto {
-    position: absolute;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background-image: url(assets/bg.jpg);
-    background-position: 80%;
-    background-size: 700px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-size: 10px;
-    font-weight: bold;
-    z-index: 1; /* Sovrappone il contenuto al cerchio del timer */
-}
-
-#timer {
-    font-size: 20px;
-    margin: 5px 0;
-}
-
 

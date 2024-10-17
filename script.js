@@ -107,34 +107,34 @@
   let registro = []; // per racciare le risposte sbagliate e corrette
   let verifica; //bool da aggiungere a verifica in caso di risposta giusta o errata
   let esito = "";
-  let timerInterval; // Variabile globale per il timer
   let btn = document.getElementById("conferma");
+  let timerInterval;
 
 //funzioni
 
 function startTimer() {
-    let tempo = 10; // Imposta il tempo per ogni domanda 
+    // Cancella il vecchio 
+    clearInterval(timerInterval);
+
+    let tempo = 10; // imposto il tempo
     const countdown = document.getElementById("timer");
   
-    // Cancella il vecchio timer se esiste (utile quando si passa alla nuova domanda)
-    clearInterval(timerInterval);
-  
     // Avvia il nuovo timer
-    timerInterval = setInterval(function () {
+    timerInterval = setInterval( ()=> {
       countdown.textContent = tempo;
       tempo--;
-      
-      const percentualeTempo = (tempo / 10) * 100;
+      // gestiosco il timer con conic gradiente
+      const percentualeTempo = (tempo/ 10) * 100;
       const cerchioDiv = document.querySelector('.cerchio');
       // Aggiorna il conic-gradient per il timer
       cerchioDiv.style.background = `conic-gradient(
-        rgba(255, 255, 255, 0.1) ${percentualeTempo}%, 
+        rgba(255, 255, 255, 0.1) 0% ${percentualeTempo}%, 
         #00ffff ${percentualeTempo}% 100% 
       )`;
 
       if (tempo < 0) {
         clearInterval(timerInterval); // Ferma il timer
-        passaAllaProssimaDomanda(); // Passa automaticamente alla prossima domanda
+        setTimeout(passaAllaProssimaDomanda,1100); // Per gestire lo 0, aspetto 1 secondo
       }
     }, 1000);
 }
@@ -144,8 +144,7 @@ function passaAllaProssimaDomanda() {
     currentQuestionIndex++;
   
     if (currentQuestionIndex < questions.length) {
-      creaDomande(); // Carica la prossima domanda
-      startTimer(); // Riparte il timer per la nuova domanda
+      creaDomande(); 
     } else {
       clearInterval(timerInterval);
       mostraFineQuiz();
@@ -167,19 +166,19 @@ function creaDomande() {
 
   const currentQuestion = questions[currentQuestionIndex];
 
-  // Imposta la domanda
+  // mando la domanda a video
   const questionText = document.createElement("h2");
   questionText.textContent = currentQuestion.question;
   domandaDiv.appendChild(questionText);
 
-  // Combina le risposte giuste e sbagliate
+  // unisco le risposte giuste e sbagliate
   let selezioni = currentQuestion.incorrect_answers.concat(currentQuestion.correct_answer);
 
-  // Ottieni tutti i checkbox e le label
+  // prendo tutti i checkbox e le label
   const casellelab = risposte.getElementsByClassName("label");
   const checkboxes = document.getElementsByClassName("myCheckbox");
 
-  // Reset dei checkbox (deseleziona tutti)
+  // reset checkbox
   for (let checkbox of checkboxes) {
       checkbox.checked = false;
       checkbox = false;
@@ -187,7 +186,7 @@ function creaDomande() {
 
   // Gestione del numero di checkbox in base al tipo di domanda
   if (currentQuestion.type === "boolean") {
-      // Domanda boolean: mostra solo 2 opzioni
+      // Domanda boolean mostra solo 2 opzioni con la classe vis che nasconde la label e il check
       for (let i = 0; i < casellelab.length; i++) {
           if (i < 2) {
               // Mostra solo i primi due checkbox e label
@@ -223,16 +222,16 @@ function verificaRisposta() {
   const checkboxes = document.getElementsByClassName("myCheckbox");
   let selectedValue = null;
 
-  // Trova il checkbox selezionato
+  // Trova il checkbox selezionato e prendi valore
   for (let checkbox of checkboxes) {
       if (checkbox.checked) {
-          selectedValue = checkbox.value; // Ottieni il valore del checkbox selezionato
-          break; // Ferma il ciclo una volta trovato
+          selectedValue = checkbox.value; 
+          break; 
       }
   }
 
   if (selectedValue !== null) {
-      const currentQuestion = questions[currentQuestionIndex]; // Domanda corrente
+      const currentQuestion = questions[currentQuestionIndex]; // Domanda attuale
       const correctAnswer = currentQuestion.correct_answer; // Risposta corretta
 
       // Confronta la risposta selezionata con la risposta corretta
@@ -265,7 +264,7 @@ function mostraFineQuiz() {
   risposte.innerHTML = ""; 
 
   const domandaDiv = document.getElementById("domanda");
-  domandaDiv.innerHTML = "<span style='font-size:60px; text-align:center'> <b> Quiz Completato! </b> </span>";
+  domandaDiv.innerHTML = "<span style='font-size:60px; text-align:center'> <b> Benchmark Completato! </b> </span>";
 
   const MostraRis = document.getElementById("finequiz"); 
   MostraRis.innerHTML = ""; // Pulisci il contenuto precedente
@@ -289,18 +288,18 @@ function mostraFineQuiz() {
   const graficoDiv = document.querySelector(".grafico");
   graficoDiv.style.position = "relative"; 
   graficoDiv.style.display = "block";
-  graficoDiv.style.width = "200px"; 
-  graficoDiv.style.height = "200px";  
+  graficoDiv.style.width = "250px"; 
+  graficoDiv.style.height = "250px";  
   graficoDiv.style.background = `conic-gradient(
     green 0% ${percentualeGiuste}%, 
     red ${percentualeGiuste}% 100%
 )`;
-
+//qui setto l'interno del grafico
   const graficoDiv1 = document.querySelector(".graficovuoto");
   graficoDiv1.style.position = "absolute";
   graficoDiv1.style.display = "block";
-  graficoDiv1.style.width = "180px";
-  graficoDiv1.style.height = "180px";
+  graficoDiv1.style.width = "210px";
+  graficoDiv1.style.height = "210px";
   graficoDiv1.style.display = "flex";
   graficoDiv1.style.justifyContent = "center";
   graficoDiv1.style.alignItems = "center";
@@ -311,12 +310,12 @@ function mostraFineQuiz() {
   let span = document.createElement("span");
   let votoFin = document.createElement("span");
 
-  if(giuste >= 6){
+  if(giuste >= questions.length*0.6){
       span.innerHTML = "<span style='color:green; font-size:50px'> Test superato </span>"
   } else{
       span.innerHTML = "<span style='color:red; font-size:50px'> Test non superato </span>"
   }
-  votoFin.innerHTML = "<span style='font-size:50px'>il tuo punteggio è di:" + voto +"</span>";
+  votoFin.innerHTML = "<span style='font-size:50px'>il tuo punteggio è di: " + voto +"</span>";
 
   MostraRis.appendChild(span); 
   MostraRis.appendChild(votoFin);
@@ -349,8 +348,13 @@ window.onload = function() {
 };
 
 //chiudo la prima pagina e vado al quiz
-function vaiAdUnAltraPagina() {
-  window.location.href = "test.html"; 
+function vaiAquiz() {
+  let scelta = document.querySelector("#checkbox");
+  if(scelta.checked){
+    window.location.href = "test.html";
+  } else {
+    alert("non hai dato il consenso a proseguire! non puoi procedere al quiz");
+  }  
 }
 
 
