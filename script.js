@@ -242,11 +242,13 @@ function passaAllaProssimaDomanda() {
 }
 
 function creaDomande() {
-  let tempoDomanda = 60;
+  let tempoDomanda = 0;
   const currentQuestion = questions[currentQuestionIndex];
 
   if (currentQuestion.type === "boolean") {
     tempoDomanda = 30;
+  } else {
+    tempoDomanda = 60;
   }
 
   startTimer(tempoDomanda); 
